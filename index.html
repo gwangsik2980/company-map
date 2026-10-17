@@ -67,45 +67,12 @@
  #list b{font-size:14px;font-weight:700;letter-spacing:-0.02em;color:#fff}
  #list small{display:block;color:var(--sub);font-size:12px;margin-top:3px}
 
- /* 지도 : 회색 톤으로 눌러서 벽면처럼 */
- #map{flex:1;background:var(--char-2)}
- .leaflet-container{font-family:inherit}
- .leaflet-tile-pane{filter:grayscale(.55) contrast(1.03)}
- .leaflet-bar,.leaflet-control-layers{border:1px solid #8a8a86 !important;border-radius:2px !important;box-shadow:0 10px 24px rgba(0,0,0,.35) !important}
- .leaflet-bar a,.leaflet-bar a:hover{background:var(--steel);color:var(--ink);border-bottom-color:#8a8a86;border-radius:0 !important}
- .leaflet-bar a:hover{filter:brightness(1.06)}
- .leaflet-control-layers{background:var(--char-2);color:var(--text)}
- .leaflet-control-layers-expanded{padding:10px 14px}
- .leaflet-control-layers-toggle{background-color:#d8d8d5}
- .leaflet-control-attribution{background:rgba(21,21,21,.78) !important;color:var(--mute)}
- .leaflet-control-attribution a{color:var(--sub)}
-
- /* 건물 마커 : 스테인리스 핀 */
- .pin{background:var(--steel);border:2px solid #151515;border-radius:50%;box-shadow:0 0 0 1px #8a8a86,0 4px 10px rgba(0,0,0,.45)}
- .pin.many{border-radius:2px;transform:rotate(45deg)}
- .marker-cluster-small,.marker-cluster-medium,.marker-cluster-large{background:rgba(21,21,21,.35)}
- .marker-cluster-small div,.marker-cluster-medium div,.marker-cluster-large div{background:var(--char);color:var(--text);border:2px solid #b4b4b1;
-  font-family:var(--display);font-stretch:118%;font-weight:800;font-size:12px}
- .marker-cluster-large div{background:var(--panel);border-color:#e4e4e2}
-
- /* 말풍선 */
- .leaflet-popup-content-wrapper{background:var(--char-2);color:var(--text);border:1px solid var(--line-hi);border-radius:2px;box-shadow:0 18px 40px rgba(0,0,0,.5)}
- .leaflet-popup-tip{background:var(--char-2);border:1px solid var(--line-hi)}
- .leaflet-popup-content{margin:16px 18px;line-height:1.55}
- .leaflet-container a.leaflet-popup-close-button{color:var(--sub)} .leaflet-container a.leaflet-popup-close-button:hover{color:#fff}
- .pop h3{margin:0 0 8px;font-size:16px;font-weight:800;letter-spacing:-0.02em;color:#fff}
- .pop h3::before{content:"";display:block;width:22px;height:3px;background:var(--steel);margin-bottom:10px}
- .pop .co{padding:12px 0;border-top:1px solid var(--line)} .pop .co:first-of-type{border-top:0;padding-top:0}
- .pop table{border-collapse:collapse;font-size:12px} .pop td{padding:3px 8px 3px 0;vertical-align:top;color:#e4e4e1}
- .pop td:first-child{color:var(--mute);white-space:nowrap}
- .pop .links{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
- .pop .links a{font-size:12px;font-weight:600;text-decoration:none;color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:2px;padding:4px 9px}
- .pop .links a:hover{background:rgba(255,255,255,.08)}
- .pop .links a:first-child{background:var(--steel);color:var(--ink);border-color:#8a8a86}
- .warn{color:#f0b38a;font-size:11px;padding:8px 10px;margin-bottom:10px;border-left:3px solid #f0b38a;background:rgba(240,179,138,.08)}
-
- /* 회사 이름표 */
- .name-label{background:rgba(21,21,21,.9);color:#f2f2f0;border:1px solid #5f5f5b;border-radius:2px;font-size:11px;padding:2px 6px;box-shadow:0 4px 10px rgba(0,0,0,.35);font-weight:600}
+ /* 지도 위 요소는 원래 밝은 지도 스타일 그대로 */
+ #map{flex:1;color:#1d1d1f;color-scheme:light}
+ .pop h3{margin:0 0 6px;font-size:15px} .pop .co{padding:8px 0;border-top:1px solid #e3e3e8} .pop .co:first-of-type{border-top:0;padding-top:0}
+ .pop table{border-collapse:collapse;font-size:12px} .pop td{padding:2px 6px 2px 0;vertical-align:top} .pop td:first-child{color:#6b6b70;white-space:nowrap}
+ .pop .links a{font-size:12px;margin-right:8px;color:#2f6fe4} .warn{color:#c2410c;font-size:11px}
+ .name-label{background:rgba(255,255,255,.92);border:1px solid #c9ced8;border-radius:4px;font-size:11px;padding:1px 5px;box-shadow:none;font-weight:600}
  .name-label:before{display:none}
 
  @media (max-width:760px){
@@ -177,10 +144,9 @@ function popupHtml(b, list){
 const namesOf = list => list.map(c => c["기업명"]).join(", ");
 BUILDINGS.forEach(b => {
   const names = namesOf(b.companies);
-  const icon = L.divIcon({className: b.companies.length > 1 ? "pin many" : "pin", iconSize:[14,14]});
-  b.marker = L.marker([b.lat, b.lon], {title:names, icon})
+  b.marker = L.marker([b.lat, b.lon], {title:names})
     .bindPopup(popupHtml(b, b.companies), {maxWidth:320, maxHeight:360})
-    .bindTooltip(names, {permanent:true, direction:"top", offset:[0,-9], className:"name-label"});
+    .bindTooltip(names, {permanent:true, direction:"top", offset:[-15,-12], className:"name-label"});
   b.shownKey = b.companies.map((_, i) => i).join(",");
   b.addrSearch = b.address.toLowerCase();
   b.companies.forEach(c => c.search = [c["기업명"], c["DART 회사명"], c["같은 회사 다른 표기"]].join(" ").toLowerCase());
