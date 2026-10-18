@@ -6,37 +6,92 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Archivo:wdth,wght@112..125,500..900&display=swap">
 <style>
- :root{--bg:#fff;--fg:#1d1d1f;--muted:#6b6b70;--line:#e3e3e8;--accent:#2f6fe4;--chip:#f1f3f7}
- *{box-sizing:border-box} html,body{margin:0;height:100%;font-family:-apple-system,"Malgun Gothic","Apple SD Gothic Neo",sans-serif;color:var(--fg);background:var(--bg)}
+ /* GWANG 포트폴리오와 같은 재질 : 콘크리트 · 차콜 · 스테인리스 */
+ :root{
+  color-scheme:dark;
+  --char:#151515;--char-2:#1d1d1d;--panel:#242424;--stucco:#5f5f5b;--stucco-lo:#464643;--ink:#121212;
+  --text:#f2f2f0;--sub:#b4b4b0;--mute:#808080;--line:#2f2f2f;--line-hi:#3d3d3d;
+  --steel:linear-gradient(180deg,#e4e4e2 0%,#b4b4b1 38%,#d8d8d5 55%,#9d9d99 100%);
+  --noise:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  --display:"Archivo","Noto Sans KR",sans-serif;
+ }
+ *{box-sizing:border-box}
+ html,body{margin:0;height:100%;font-family:"Noto Sans KR","Pretendard",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--text);background:var(--char);letter-spacing:-0.01em;-webkit-font-smoothing:antialiased;word-break:keep-all}
  #app{display:flex;height:100%}
- #side{width:320px;min-width:320px;border-right:1px solid var(--line);display:flex;flex-direction:column}
- #side header{padding:14px 16px 10px;border-bottom:1px solid var(--line)}
- #side h1{font-size:17px;margin:0 0 4px} #count{font-size:12px;color:var(--muted)}
- #q{width:100%;margin-top:10px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:14px}
- .filters{padding:8px 16px;border-bottom:1px solid var(--line);font-size:12px}
- .filters summary{cursor:pointer;color:var(--muted);padding:4px 0}
- .chips{display:flex;flex-wrap:wrap;gap:4px;padding:6px 0}
- .chips label{background:var(--chip);border-radius:12px;padding:3px 8px;cursor:pointer;user-select:none}
- .chips input{margin:0 4px 0 0;vertical-align:-1px}
- #list{overflow:auto;flex:1;margin:0;padding:0;list-style:none}
- #list li{padding:9px 16px;border-bottom:1px solid #f0f0f3;cursor:pointer}
- #list li:hover{background:#f6f8fc} #list b{font-size:14px} #list small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
- #map{flex:1}
- .pop h3{margin:0 0 6px;font-size:15px} .pop .co{padding:8px 0;border-top:1px solid var(--line)} .pop .co:first-of-type{border-top:0;padding-top:0}
- .pop table{border-collapse:collapse;font-size:12px} .pop td{padding:2px 6px 2px 0;vertical-align:top} .pop td:first-child{color:var(--muted);white-space:nowrap}
- .pop .links a{font-size:12px;margin-right:8px;color:var(--accent)} .warn{color:#c2410c;font-size:11px}
+
+ /* 사이드바 : 차콜 벽 */
+ #side{width:340px;min-width:340px;border-right:1px solid #000;display:flex;flex-direction:column;background:var(--char);position:relative}
+ #side::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:var(--noise);opacity:.16;mix-blend-mode:overlay}
+ #side > *{position:relative}
+
+ /* 헤더 : 회색 스투코 벽 */
+ #side header{padding:20px 18px 18px;border-bottom:1px solid #000;
+  background-color:var(--stucco);
+  background-image:var(--noise),radial-gradient(120% 90% at 15% 0%,rgba(255,255,255,.14),transparent 60%),linear-gradient(180deg,var(--stucco),var(--stucco-lo));
+  background-blend-mode:multiply,normal,normal}
+ .brand{display:flex;align-items:center;gap:8px;font-family:var(--display);font-stretch:112%;font-size:11px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#dadad6}
+ .brand b{font-stretch:125%;font-weight:900;letter-spacing:.08em;font-size:14px;color:var(--text)}
+ .brand i{font-style:normal;color:#9a9a96}
+ #side h1{font-size:22px;font-weight:800;letter-spacing:-0.03em;line-height:1.3;margin:10px 0 4px;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.28)}
+ #count{font-size:12px;color:#e2e2de;font-variant-numeric:tabular-nums}
+ #q{width:100%;margin-top:14px;padding:10px 12px;border:1px solid rgba(255,255,255,.45);border-radius:2px;font:inherit;font-size:14px;color:#fff;background:rgba(0,0,0,.22);outline:none}
+ #q::placeholder{color:#c8c8c4}
+ #q:focus{border-color:#e4e4e2;background:rgba(0,0,0,.32)}
+
+ /* 필터 */
+ .filters{padding:6px 18px 8px;border-bottom:1px solid var(--line);font-size:12px;background:var(--char-2)}
+ .filters summary{cursor:pointer;padding:8px 0;list-style:none;display:flex;align-items:center;gap:10px;
+  font-family:var(--display);font-stretch:118%;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--sub)}
+ .filters summary::-webkit-details-marker{display:none}
+ .filters summary::before{content:"";width:18px;height:2px;background:var(--steel);flex:none}
+ .filters summary span{font-family:"Noto Sans KR",sans-serif;font-size:12px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--mute)}
+ .filters summary::after{content:"+";margin-left:auto;font-size:15px;font-weight:500;color:var(--sub);transition:transform .25s}
+ .filters details[open] summary::after{transform:rotate(45deg)}
+ .filters summary:hover{color:#fff}
+ .chips{display:flex;flex-wrap:wrap;gap:6px;padding:4px 0 10px}
+ .chips label{border:1px solid var(--line-hi);border-radius:2px;padding:4px 9px;cursor:pointer;user-select:none;color:var(--mute);background:transparent;transition:all .2s}
+ .chips label:hover{color:#fff;border-color:#8a8a86}
+ .chips label:has(input:checked){background:var(--steel);color:var(--ink);border-color:#cfcfcc;font-weight:600}
+ .chips input{position:absolute;opacity:0;pointer-events:none}
+ .chips label:focus-within{outline:2px solid #f2f2f0;outline-offset:2px}
+
+ /* 목록 */
+ #list{overflow:auto;flex:1;margin:0;padding:0;list-style:none;scrollbar-color:#3d3d3d transparent}
+ #list li{padding:12px 18px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .15s;position:relative}
+ #list li::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--steel);opacity:0;transition:opacity .15s}
+ #list li:hover{background:var(--panel)} #list li:hover::before{opacity:1}
+ #list b{font-size:14px;font-weight:700;letter-spacing:-0.02em;color:#fff}
+ #list small{display:block;color:var(--sub);font-size:12px;margin-top:3px}
+
+ /* 지도 위 요소는 원래 밝은 지도 스타일 그대로 */
+ #map{flex:1;color:#1d1d1f;color-scheme:light}
+ .pop h3{margin:0 0 6px;font-size:15px} .pop .co{padding:8px 0;border-top:1px solid #e3e3e8} .pop .co:first-of-type{border-top:0;padding-top:0}
+ .pop table{border-collapse:collapse;font-size:12px} .pop td{padding:2px 6px 2px 0;vertical-align:top} .pop td:first-child{color:#6b6b70;white-space:nowrap}
+ .pop .links a{font-size:12px;margin-right:8px;color:#2f6fe4} .warn{color:#c2410c;font-size:11px}
  .name-label{background:rgba(255,255,255,.92);border:1px solid #c9ced8;border-radius:4px;font-size:11px;padding:1px 5px;box-shadow:none;font-weight:600}
  .name-label:before{display:none}
- @media (max-width:760px){#app{flex-direction:column}#side{width:100%;min-width:0;height:42%;border-right:0;border-bottom:1px solid var(--line)}}
+
+ @media (max-width:760px){
+  #app{flex-direction:column}
+  #side{width:100%;min-width:0;height:46%;border-right:0;border-bottom:1px solid #000}
+  #side header{padding:14px 16px 14px} #side h1{font-size:19px;margin-top:6px}
+  .filters{padding:4px 16px 6px} #list li{padding:11px 16px}
+ }
+ @media (prefers-reduced-motion:reduce){*{transition:none !important}}
 </style></head><body>
 <div id="app">
  <aside id="side">
-  <header><h1>구매 직무 기업 지도</h1><div id="count"></div>
+  <header>
+   <p class="brand" style="margin:0"><b>GWANG</b><i>/</i>Procurement Map</p>
+   <h1>구매 직무 기업 지도</h1><div id="count"></div>
    <input id="q" placeholder="회사명이나 지역으로 찾기"></header>
   <div class="filters">
-   <details><summary>산업군 필터</summary><div class="chips" id="fInd"></div></details>
-   <details><summary>기업규모 필터</summary><div class="chips" id="fSize"></div></details>
+   <details><summary>Industry <span>산업군</span></summary><div class="chips" id="fInd"></div></details>
+   <details><summary>Size <span>기업규모</span></summary><div class="chips" id="fSize"></div></details>
   </div>
   <ul id="list"></ul>
  </aside>
