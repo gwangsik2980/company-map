@@ -43,7 +43,7 @@
  #q:focus{border-color:#e4e4e2;background:rgba(0,0,0,.32)}
 
  /* 필터 */
- .filters{padding:6px 18px 8px;border-bottom:1px solid var(--line);font-size:12px;background:var(--char-2)}
+ .filters{padding:6px 18px 8px;border-bottom:1px solid var(--line);font-size:12px;background:var(--char-2);flex:0 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-color:#3d3d3d transparent}
  .filters summary{cursor:pointer;padding:8px 0;list-style:none;display:flex;align-items:center;gap:10px;
   font-family:var(--display);font-stretch:118%;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--sub)}
  .filters summary::-webkit-details-marker{display:none}
@@ -77,9 +77,11 @@
 
  @media (max-width:760px){
   #app{flex-direction:column}
-  #side{width:100%;min-width:0;height:46%;border-right:0;border-bottom:1px solid #000}
+  #side{width:100%;min-width:0;height:52%;border-right:0;border-bottom:1px solid #000}
   #side header{padding:14px 16px 14px} #side h1{font-size:19px;margin-top:6px}
-  .filters{padding:4px 16px 6px} #list li{padding:11px 16px}
+  #side{overflow:hidden}
+  /* 필터를 펼쳐도 지도 뒤로 잘리지 않게: 필터 영역은 안에서 스크롤, 목록은 최소 높이 확보 */
+  .filters{padding:4px 16px 6px} #list{flex:1 0 96px} #list li{padding:11px 16px}
  }
  @media (prefers-reduced-motion:reduce){*{transition:none !important}}
 </style></head><body>
