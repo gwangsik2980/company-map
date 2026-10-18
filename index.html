@@ -21,7 +21,17 @@
  }
  *{box-sizing:border-box}
  html,body{margin:0;height:100%;font-family:"Noto Sans KR","Pretendard",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--text);background:var(--char);letter-spacing:-0.01em;-webkit-font-smoothing:antialiased;word-break:keep-all}
- #app{display:flex;height:100%}
+ body{display:flex;flex-direction:column}
+ #app{display:flex;flex:1;min-height:0}
+
+ /* 맨 위 머리 : 포트폴리오 공통 (엠블럼 + GWANG) */
+ .site-top{flex:none;background:var(--char);border-bottom:1px solid var(--line)}
+ .site-top .in{height:58px;padding:0 18px;display:flex;align-items:center}
+ .site-top .logo{display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--text);font-family:var(--display);font-stretch:125%;font-weight:900;letter-spacing:.08em;font-size:15px}
+ .site-top .emblem{width:24px;height:24px;display:block;overflow:visible}
+ .site-top .emblem g{transform-origin:0 0;transition:transform .8s cubic-bezier(.3,.7,.2,1)}
+ .site-top .logo:hover .emblem g{transform:rotate(60deg)}
+ .site-top .logo:focus-visible{outline:2px solid #d8d8d5;outline-offset:4px}
 
  /* 사이드바 : 차콜 벽 */
  #side{width:340px;min-width:340px;border-right:1px solid #000;display:flex;flex-direction:column;background:var(--char);position:relative}
@@ -33,10 +43,7 @@
   background-color:var(--stucco);
   background-image:var(--noise),radial-gradient(120% 90% at 15% 0%,rgba(255,255,255,.14),transparent 60%),linear-gradient(180deg,var(--stucco),var(--stucco-lo));
   background-blend-mode:multiply,normal,normal}
- .brand{display:flex;align-items:center;gap:8px;font-family:var(--display);font-stretch:112%;font-size:11px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#dadad6}
- .brand b{font-stretch:125%;font-weight:900;letter-spacing:.08em;font-size:14px;color:var(--text)}
- .brand i{font-style:normal;color:#9a9a96}
- #side h1{font-size:22px;font-weight:800;letter-spacing:-0.03em;line-height:1.3;margin:10px 0 4px;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.28)}
+ #side h1{font-size:22px;font-weight:800;letter-spacing:-0.03em;line-height:1.3;margin:0 0 4px;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.28)}
  #count{font-size:12px;color:#e2e2de;font-variant-numeric:tabular-nums}
  #q{width:100%;margin-top:14px;padding:10px 12px;border:1px solid rgba(255,255,255,.45);border-radius:2px;font:inherit;font-size:14px;color:#fff;background:rgba(0,0,0,.22);outline:none}
  #q::placeholder{color:#c8c8c4}
@@ -78,18 +85,26 @@
  @media (max-width:760px){
   #app{flex-direction:column}
   #side{width:100%;min-width:0;height:52%;border-right:0;border-bottom:1px solid #000}
-  #side header{padding:14px 16px 14px} #side h1{font-size:19px;margin-top:6px}
+  #side header{padding:14px 16px 14px} #side h1{font-size:19px}
+  .site-top .in{padding:0 16px}
   #side{overflow:hidden}
   /* 필터를 펼쳐도 지도 뒤로 잘리지 않게: 필터 영역은 안에서 스크롤, 목록은 최소 높이 확보 */
   .filters{padding:4px 16px 6px} #list{flex:1 0 96px} #list li{padding:11px 16px}
  }
  @media (prefers-reduced-motion:reduce){*{transition:none !important}}
 </style></head><body>
+<header class="site-top">
+ <div class="in">
+  <a class="logo" href="https://gwangsik2980.github.io/" aria-label="GWANG 포트폴리오">
+   <svg class="emblem" viewBox="-12 -12 24 24" aria-hidden="true"><g class="emblem-g" fill="none" stroke="#f2f2f0" stroke-width="1.4" stroke-linejoin="round"></g></svg>
+   GWANG
+  </a>
+ </div>
+</header>
 <div id="app">
  <aside id="side">
   <header>
-   <p class="brand" style="margin:0"><b>GWANG</b><i>/</i>Procurement Map</p>
-   <h1>구매 직무 기업 지도</h1><div id="count"></div>
+    <h1>구매 직무 기업 지도</h1><div id="count"></div>
    <input id="q" placeholder="회사명이나 지역으로 찾기"></header>
   <div class="filters">
    <details><summary>Industry <span>산업군</span></summary><div class="chips" id="fInd"></div></details>
@@ -99,6 +114,23 @@
  </aside>
  <div id="map"></div>
 </div>
+<script>
+// 엠블럼(육각 바람개비) — 포트폴리오와 같은 모양
+(() => {
+  const deg = Math.PI / 180;
+  const p = (r, a) => `${(r*Math.cos(a*deg)).toFixed(2)},${(r*Math.sin(a*deg)).toFixed(2)}`;
+  let d = "";
+  for (let k = 0; k < 6; k++) {
+    const a = k * 60 - 90;
+    d += `M${p(10.5, a-30)}L${p(10.5, a+30)}L${p(3.4, a+75)}Z`;
+    d += `M${p(6.5, a-10)}L${p(10.5, a+30)}`;
+  }
+  document.querySelectorAll(".emblem-g").forEach(g => {
+    const el = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    el.setAttribute("d", d); g.appendChild(el);
+  });
+})();
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
 <script>
