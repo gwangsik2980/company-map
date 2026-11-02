@@ -13,7 +13,7 @@
   color-scheme:dark;
   --char:#151515;--char-2:#1d1d1d;--panel:#242424;--ink:#121212;
   --text:#f2f2f0;--sub:#b4b4b0;--mute:#808080;--line:#2f2f2f;--line-hi:#3d3d3d;
-  --steel:linear-gradient(180deg,#e4e4e2 0%,#b4b4b1 38%,#d8d8d5 55%,#9d9d99 100%);
+  --white:#f2f2f0;   /* 강조·활성은 흰색 단색 (실버 그라디언트는 촌스럽다는 사용자 의견, 2026-11-02) */
   --noise:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
   --display:"Archivo","Pretendard",sans-serif;
   --r:12px;--r-sm:8px;
@@ -34,13 +34,13 @@
  .site-top .emblem{width:24px;height:24px;display:block;overflow:visible}
  .site-top .emblem g{transform-origin:0 0;transition:transform .8s cubic-bezier(.3,.7,.2,1)}
  .site-top .logo:hover .emblem g{transform:rotate(60deg)}
- .site-top .logo:focus-visible{outline:2px solid #d8d8d5;outline-offset:4px;border-radius:var(--r-sm)}
+ .site-top .logo:focus-visible{outline:2px solid var(--white);outline-offset:4px;border-radius:var(--r-sm)}
 
  /* 사이드바 */
  #side{width:340px;min-width:340px;border-right:1px solid var(--line);display:flex;flex-direction:column;background:var(--char-2)}
  #side header{padding:22px 18px 16px}
  .eyebrow{font-family:var(--display);font-stretch:112%;font-weight:700;font-size:11px;letter-spacing:.24em;color:var(--sub);text-transform:uppercase}
- .eyebrow::before{content:"";display:block;width:28px;height:3px;background:var(--steel);margin-bottom:10px}
+ .eyebrow::before{content:"";display:block;width:28px;height:3px;background:var(--white);margin-bottom:10px}
  #side h1{font-size:22px;font-weight:800;letter-spacing:-.03em;line-height:1.35;margin:6px 0 2px;color:#fff}
  #count{font-size:13px;color:var(--sub);font-variant-numeric:tabular-nums}
  #q{width:100%;margin-top:14px;padding:10px 12px;border:1px solid var(--line-hi);border-radius:var(--r-sm);font:inherit;font-size:14px;color:var(--text);background:var(--char);outline:none;transition:border-color .2s}
@@ -60,7 +60,8 @@
  .chips{display:flex;flex-wrap:wrap;gap:6px;padding:2px 0 12px}
  .chips label{border:1px solid var(--line-hi);border-radius:6px;padding:4px 9px;cursor:pointer;user-select:none;color:var(--sub);background:var(--char-2);transition:all .2s}
  .chips label:hover{color:#fff;border-color:#8a8a86}
- .chips label:has(input:checked){background:var(--steel);color:var(--ink);border-color:#8a8a86;font-weight:600}
+ .chips label:has(input:checked){background:var(--white);color:var(--ink);border-color:var(--white);font-weight:600}
+ .chips label:has(input:checked):hover{background:#fff;color:var(--ink)}
  .chips input{position:absolute;opacity:0;pointer-events:none}
  .chips label:focus-within{outline:2px solid #f2f2f0;outline-offset:2px}
 
@@ -84,9 +85,21 @@
  .leaflet-control-attribution a{color:var(--text)}
 
  /* 핀 : 차콜 점 + 스틸 테두리 */
- .pin{width:16px;height:16px;border-radius:50%;background:#1d1d1d;border:3px solid #d8d8d5;box-shadow:0 2px 6px rgba(0,0,0,.45)}
- .cl{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:var(--steel);border:1px solid #8a8a86;color:var(--ink);font-family:var(--display);font-stretch:118%;font-weight:800;font-size:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 4px 12px rgba(0,0,0,.4)}
- .cl.m{width:44px;height:44px} .cl.l{width:50px;height:50px;font-size:14px}
+ .pin{width:16px;height:16px;border-radius:50%;background:#1d1d1d;border:3px solid var(--white);box-shadow:0 2px 6px rgba(0,0,0,.45)}
+ /* 묶음 원 : 반투명 바깥 띠 + 안쪽은 취업본부 유리 버튼(.btn.soft) 톤 */
+ .cl{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgba(29,29,29,.2)}
+ .cl i{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-style:normal;color:#fff;
+  font-family:var(--display);font-stretch:118%;font-weight:800;font-size:12px;border:1px solid rgba(255,255,255,.14);
+  background:radial-gradient(120% 140% at 85% -20%,rgba(255,255,255,.1),transparent 55%),linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,0) 50%),#222;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 4px 10px rgba(0,0,0,.3)}
+ .cl.m{width:46px;height:46px} .cl.m i{width:32px;height:32px;font-size:13px}
+ .cl.l{width:54px;height:54px} .cl.l i{width:38px;height:38px;font-size:13px}
+ .cl,.cl i{transition:background .35s,border-color .35s,box-shadow .35s}
+ /* 확대 단계별 모양: 멀리(far) 반투명 → 중간(기본) 유리 톤 → 가까이(near) 핀과 같은 검은 점 */
+ #map[data-z="far"] .cl{background:rgba(29,29,29,.1)}
+ #map[data-z="far"] .cl i{background:rgba(34,34,34,.4);border-color:rgba(255,255,255,.3);box-shadow:none;backdrop-filter:blur(2px)}
+ #map[data-z="near"] .cl{background:transparent}
+ #map[data-z="near"] .cl i{background:#1d1d1d;border:3px solid var(--white);box-shadow:0 2px 6px rgba(0,0,0,.45)}
  .name-label{background:rgba(29,29,29,.92);color:#fff;border:1px solid rgba(255,255,255,.14);border-radius:6px;font-size:11px;padding:2px 6px;box-shadow:none;font-weight:600}
  .name-label:before{display:none}
 
@@ -180,8 +193,12 @@ L.control.layers({"브이월드 일반":vBase, "브이월드 위성":L.layerGrou
 
 // 기본 파란 핀·초록/주황 묶음 원 대신 무채색 (DESIGN.md: 유채색 금지)
 const cluster = L.markerClusterGroup({showCoverageOnHover:false, maxClusterRadius:45,
-  iconCreateFunction: g => { const n = g.getChildCount(), s = n < 10 ? 38 : n < 50 ? 44 : 50;
-    return L.divIcon({html:`<div class="cl ${n < 10 ? "" : n < 50 ? "m" : "l"}">${n}</div>`, className:"", iconSize:[s, s]}); }});
+  iconCreateFunction: g => { const n = g.getChildCount(), s = n < 10 ? 38 : n < 50 ? 46 : 54;
+    return L.divIcon({html:`<div class="cl ${n < 10 ? "" : n < 50 ? "m" : "l"}"><i>${n}</i></div>`, className:"", iconSize:[s, s]}); }});
+// 확대 단계 표시: 7~8 멀리, 9~11 중간, 12 이상 가까이 (숫자 원 모양이 CSS로 바뀜)
+const setZoomLook = () => { const z = map.getZoom();
+  map.getContainer().dataset.z = z <= 8 ? "far" : z <= 11 ? "mid" : "near"; };
+map.on("zoomend", setZoomLook); setZoomLook();
 const PIN = L.divIcon({html:'<div class="pin"></div>', className:"", iconSize:[16, 16], iconAnchor:[8, 8], popupAnchor:[0, -8]});
 map.addLayer(cluster);
 const LABEL_ZOOM = 13;
