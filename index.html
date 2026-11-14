@@ -99,15 +99,18 @@ try { if (window.self !== window.top) document.documentElement.classList.add("em
  .pin{width:16px;height:16px;border-radius:50%;background:#5a5a58;border:3px solid var(--white);box-shadow:0 1px 4px rgba(0,0,0,.3)}
  /* 마지막으로 새로 올린 회사 : 흰 점 + 퍼지는 빛 (다음 추가 때 꺼짐, 2026-11-03) */
  /* 멀리(묶음 원·줌 13 미만) : 흰 고리가 퍼짐 / 완전 가까이(줌 13 이상, 이름표 보일 때) : 점이 발광 (사용자 의견, 2026-11-03) */
- @keyframes ring{0%{box-shadow:0 0 0 0 rgba(255,255,255,.8)}75%{box-shadow:0 0 0 16px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
- @keyframes glow{
-  0%,100%{box-shadow:0 0 4px 1px #fff,0 0 10px 4px rgba(255,255,255,.75),0 0 20px 8px rgba(255,255,255,.35)}
-  50%{box-shadow:0 0 6px 2px #fff,0 0 18px 8px rgba(255,255,255,.95),0 0 38px 16px rgba(255,255,255,.55)}}
+ /* 렉 막기(2026-11-14): box-shadow를 움직이면 매 장면 다시 칠함 → 고리는 ::after를 크기(transform)·투명도로만, 발광은 고정 그림자 + ::after 투명도로 */
+ @keyframes ring{0%{transform:scale(1);opacity:.8}75%{transform:scale(2.6);opacity:0}100%{transform:scale(2.6);opacity:0}}
+ @keyframes glow{0%,100%{opacity:.35}50%{opacity:1}}
+ .pin.new,.cl.new i{position:relative}
+ .pin.new::after,.cl.new i::after{content:"";position:absolute;inset:-3px;border-radius:50%;border:2px solid #fff;pointer-events:none;animation:ring 1.8s ease-out infinite}
+ .cl.new i::after{inset:-1px}
  .pin.logi{background:#2a2a2a;border-color:#9a9a96}
  .job-tag{display:inline-block;margin-left:6px;padding:0 5px;border:1px solid #8a8a86;border-radius:4px;color:var(--sub);font-size:10px;font-weight:600;vertical-align:2px}
- .pin.new{background:#fff;animation:ring 1.8s ease-out infinite}
- #map.near .pin.new{width:18px;height:18px;margin:-1px 0 0 -1px;border:2px solid #fff;animation:glow 1.8s ease-in-out infinite}
- .cl.new i{border-color:#fff;animation:ring 1.8s ease-out infinite}
+ .pin.new{background:#fff}
+ #map.near .pin.new{width:18px;height:18px;margin:-1px 0 0 -1px;border:2px solid #fff;box-shadow:0 0 4px 1px #fff,0 0 10px 4px rgba(255,255,255,.75)}
+ #map.near .pin.new::after{inset:-8px;border:0;background:radial-gradient(circle,rgba(255,255,255,.7),rgba(255,255,255,0) 70%);animation:glow 1.8s ease-in-out infinite}
+ .cl.new i{border-color:#fff}
  .new-tag{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:4px;background:#fff;color:var(--ink);font-family:var(--display);font-stretch:112%;font-size:10px;font-weight:800;letter-spacing:.08em;vertical-align:2px}
  #newbar{display:none;margin-top:10px;font-size:12.5px;color:var(--sub);cursor:pointer}
  #newbar b{color:#fff} #newbar:hover b{text-decoration:underline}
@@ -150,7 +153,7 @@ try { if (window.self !== window.top) document.documentElement.classList.add("em
   /* 필터를 펼쳐도 지도 뒤로 잘리지 않게: 필터 영역은 안에서 스크롤, 목록은 최소 높이 확보 */
   .filters{margin:0 12px 10px} #list{flex:1 0 96px;padding:4px 8px 10px}
  }
- @media (prefers-reduced-motion:reduce){*{transition:none !important}.pin.new,.cl.new i,#map.near .pin.new{animation:none;box-shadow:0 0 6px 2px #fff,0 0 18px 8px rgba(255,255,255,.8)}}
+ @media (prefers-reduced-motion:reduce){*{transition:none !important}.pin.new::after,.cl.new i::after{animation:none;opacity:0}.pin.new,.cl.new i,#map.near .pin.new{box-shadow:0 0 6px 2px #fff,0 0 18px 8px rgba(255,255,255,.8)}}
 </style></head><body>
 <header class="site-top">
  <div class="in">
