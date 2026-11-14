@@ -6,6 +6,8 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <meta name="apple-mobile-web-app-title" content="Company Map">
+<script>/* 취업본부 안에 끼워 볼 때(#/map) — 바깥 화면에 GWANG 로고·저작권 줄이 있으니 지도 쪽 것은 숨김 (2026-11-14) */
+try { if (window.self !== window.top) document.documentElement.classList.add("embed"); } catch (e) { document.documentElement.classList.add("embed"); }</script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
@@ -28,13 +30,14 @@
  *{box-sizing:border-box}
  html,body{margin:0;height:100%;font-family:Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:15px;color:var(--text);background:var(--char);letter-spacing:-.01em;-webkit-font-smoothing:antialiased;word-break:keep-all}
  body{display:flex;flex-direction:column}
- body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:2000;background-image:var(--noise);opacity:.08;mix-blend-mode:overlay}
+ /* 렉 막기(2026-11-14): 화면 전체를 덮던 결 무늬(fixed + mix-blend)를 뺌 — 지도를 끌 때마다 화면 전체를 다시 칠해 버벅였음(HUB 11-10과 같은 원인).
+    결은 사이드바·머리에만, mix-blend 없이 보통 겹치기로 */
  #app{display:flex;flex:1;min-height:0}
+ html.embed .site-top,html.embed .gw-copy-wrap{display:none}
 
  /* 맨 위 머리 : 엠블럼 + GWANG */
  .site-top{flex:none;background:var(--char-2);border-bottom:1px solid var(--line);position:relative}
- /* 사이드바·머리에만 결 무늬를 진하게 (지도 위는 연하게 유지) */
- .site-top::before,#side::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:var(--noise);opacity:.28;mix-blend-mode:overlay}
+ .site-top::before,#side::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:var(--noise);opacity:.1}
  .site-top > *,#side > *{position:relative}
  .site-top .in{height:56px;padding:0 18px;display:flex;align-items:center}
  .site-top .logo{display:inline-flex;align-items:center;gap:9px;text-decoration:none;color:var(--text);font-family:var(--display);font-stretch:112%;font-weight:900;letter-spacing:.04em;font-size:19px;line-height:1}
